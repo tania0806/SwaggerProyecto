@@ -4,47 +4,62 @@ using System.Data;
 using System.Data.SqlClient;
 using reportesApi.DataContext;
 using reportesApi.Models;
-
+using System.Collections.Generic;
+using reportesApi.Models.Compras;
+using OfficeOpenXml;
+using Microsoft.AspNetCore.Hosting;
+using System.IO;
+using Microsoft.AspNetCore.Mvc;
+using System.Drawing.Printing;
+using System.Linq;
+using System.Text;
 namespace reportesApi.Services
 {
     public class LoginService
     {
         private  string connection;
-        
-        
-        public LoginService(IMarcatelDatabaseSetting settings)
+        private readonly IWebHostEnvironment _webHostEnvironment;
+        private ArrayList parametros = new ArrayList();
+
+
+        public LoginService(IMarcatelDatabaseSetting settings, IWebHostEnvironment webHostEnvironment)
         {
              connection = settings.ConnectionString;
+
+             _webHostEnvironment = webHostEnvironment;
+             
         }
 
-        public UsuarioModel Login(string user, string pass)
+        public List<GetLoginModel> GetLogin()
         {
-            
-            UsuarioModel usuario = new UsuarioModel();
             ConexionDataAccess dac = new ConexionDataAccess(connection);
+            GetLoginModel login = new GetLoginModel();
+
+            List<GetLoginModel> lista = new List<GetLoginModel>();
             try
             {
-                ArrayList parametros = new ArrayList();
-                parametros.Add(new SqlParameter { ParameterName = "@pUsuario", SqlDbType = SqlDbType.VarChar, Value = user });
-                parametros.Add(new SqlParameter { ParameterName = "@pPass", SqlDbType = SqlDbType.VarChar, Value = pass });
-                DataSet ds = dac.Fill("sp_login_pv", parametros);
+                parametros = new ArrayList();
+                DataSet ds = dac.Fill("sp_get_registro", parametros);
                 if (ds.Tables[0].Rows.Count > 0)
                 {
-                    foreach (DataRow row in ds.Tables[0].Rows)
-                    {
-                        usuario.NombreUsuario = row["NombreUsuario"].ToString();
-                        usuario.NombrePersona = row["NombrePersona"].ToString();
-                        usuario.Id = int.Parse(row["Id"].ToString());
-                    
-                    }
+
+                  lista = ds.Tables[0].AsEnumerable()
+                    .Select(dataRow => new GetLoginModel {
+                        Id = int.Parse(dataRow["Id"].ToString()),
+                        Nombres = dataRow["Nombres"].ToString(),
+                        ApellidoPaterno = dataRow["ApellidoPaterno"].ToString(),
+                        Correo = dataRow["Correo"].ToString(),
+                        Contraseña = dataRow["Contraseña"].ToString(),
+                        NumeroTelefono= dataRow["NumeroTelefono"].ToString(),
+                        Token = dataRow["Token"].ToString()
+                    }).ToList();
                 }
-                return usuario;
             }
             catch (Exception ex)
             {
                 throw ex;
             }
-           
+            return lista;
         }
     }
 }

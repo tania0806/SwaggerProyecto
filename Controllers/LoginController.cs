@@ -6,6 +6,13 @@ using Microsoft.AspNetCore.Authorization;
 using reportesApi.Models;
 using Microsoft.Extensions.Logging;
 using System.Net;
+using reportesApi.Helpers;
+using Newtonsoft.Json;
+using System.IO;
+using OfficeOpenXml;
+using OfficeOpenXml.Style;
+using Microsoft.AspNetCore.Hosting;
+using reportesApi.Models.Compras;
 
 namespace reportesApi.Controllers
 {
@@ -13,62 +20,49 @@ namespace reportesApi.Controllers
     [Route("api")]
     public class LoginController: ControllerBase
     {
-        private readonly LoginService _loginService;
+   
+        private readonly LoginService _LoginService;
         private readonly ILogger<LoginController> _logger;
   
         private readonly IJwtAuthenticationService _authService;
-
+        private readonly IWebHostEnvironment _hostingEnvironment;
+        
 
         Encrypt enc = new Encrypt();
 
-        public LoginController(LoginService loginservice, ILogger<LoginController> logger, IJwtAuthenticationService authService) {
-            _loginService = loginservice;
+        public LoginController(LoginService LoginService, ILogger<LoginController> logger, IJwtAuthenticationService authService) {
+            _LoginService = LoginService;
             _logger = logger;
        
             _authService = authService;
+            // Configura la ruta base donde se almacenan los archivos.
+            // Asegúrate de ajustar la ruta según tu estructura de directorios.
         }
 
-        [AllowAnonymous]
-        [HttpPost("SignIn")]
-        public JsonResult SignIn([FromBody] InsertUser user)
+        [HttpGet("GetLogin")]
+        public IActionResult GetLogin()
         {
-            ResponseLogin result = new ResponseLogin();
-            result.response = new ResponseBody();
-            result.response.data = new DataResponseLogin();
-            result.response.data.Usuario = new UsuarioModel();
-          
-                string cryptedPass = enc.GetSHA256(user.Userpassword);
-           
-            var loginResponse = _loginService.Login(user.Username, user.Userpassword);
-            
-         
-           
-                if (loginResponse.Id != 0)
-                {
-                    result.StatusCode = (int)HttpStatusCode.OK;
-                    result.succes = true;
-                    result.message = "Bienvenido";
-                    result.response.data.Usuario = loginResponse;
-                    result.response.data.Status = true;
-                    result.response.data.Mensaje = "Bienvenido";
-                    var token = _authService.Authenticate(user.Username, cryptedPass);
-                    result.response.data.Token = token;
-                }
-                else
-                {
-                    result.succes = false;
-                    result.message = "Usuario o contraseña incorrecto,";
+            var objectResponse = Helper.GetStructResponse();
+            var resultado = _LoginService.GetLogin();
 
-                }
+            try
+            {
+                objectResponse.StatusCode = (int)HttpStatusCode.OK;
+                objectResponse.success = true;
+                objectResponse.message = "data cargado con exito";
 
-            
-           
-          
-           
-            
-            return new JsonResult(result);
 
+                // Llamando a la función y recibiendo los dos valores.
+                
+                 objectResponse.response = resultado;
+            }
+
+            catch (System.Exception ex)
+            {
+                objectResponse.message = ex.Message;
+            }
+
+            return new JsonResult(objectResponse);
         }
-
     }
 }
