@@ -40,6 +40,8 @@ namespace reportesApi.Services
             parametros.Add(new SqlParameter { ParameterName = "@NumeroTelefono", SqlDbType = System.Data.SqlDbType.VarChar, Value = Login.NumeroTelefono});
             parametros.Add(new SqlParameter { ParameterName = "@Correo", SqlDbType = System.Data.SqlDbType.VarChar, Value = Login.Correo});
             parametros.Add(new SqlParameter { ParameterName = "@Contraseña", SqlDbType = System.Data.SqlDbType.VarChar, Value = Login.Contraseña});
+            parametros.Add(new SqlParameter { ParameterName = "@Token", SqlDbType = System.Data.SqlDbType.VarChar, Value = 1 });
+
             try
             {
                 DataSet ds = dac.Fill("sp_InsertarRegistro", parametros);
