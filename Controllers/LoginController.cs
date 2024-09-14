@@ -39,7 +39,7 @@ namespace reportesApi.Controllers
             // Asegúrate de ajustar la ruta según tu estructura de directorios.
         }
 
-         [HttpPost("InsertAlumno")]
+         [HttpPost("InsertLogin")]
         public IActionResult InsertLogin([FromBody] InsertLoginModel req )
         {
             var objectResponse = Helper.GetStructResponse();
