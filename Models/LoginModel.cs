@@ -11,4 +11,13 @@ namespace reportesApi.Models
         public string NumeroTelefono { get; set; }
         public string Token { get; set; }
     }
+
+     public class InsertLoginModel 
+    {
+        public string Nombres { get; set; }
+        public string NumeroTelefono{ get; set; }
+        public string Correo { get; set; }
+        public string Contraseña { get; set; }
+    }
+
 }

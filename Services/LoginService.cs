@@ -30,6 +30,28 @@ namespace reportesApi.Services
              
         }
 
+        public string InsertLogin(InsertLoginModel Login)
+        {
+            ConexionDataAccess dac = new ConexionDataAccess(connection);
+            parametros = new ArrayList();
+            string mensaje;
+
+            parametros.Add(new SqlParameter { ParameterName = "@Nombres", SqlDbType = System.Data.SqlDbType.VarChar, Value = Login.Nombres });
+            parametros.Add(new SqlParameter { ParameterName = "@NumeroTelefono", SqlDbType = System.Data.SqlDbType.VarChar, Value = Login.NumeroTelefono});
+            parametros.Add(new SqlParameter { ParameterName = "@Correo", SqlDbType = System.Data.SqlDbType.VarChar, Value = Login.Correo});
+            parametros.Add(new SqlParameter { ParameterName = "@Contraseña", SqlDbType = System.Data.SqlDbType.VarChar, Value = Login.Contraseña});
+            try
+            {
+                DataSet ds = dac.Fill("sp_InsertarRegistro", parametros);
+                mensaje = ds.Tables[0].AsEnumerable().Select(dataRow => dataRow["mensaje"].ToString()).ToList()[0];
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+            return mensaje;
+        }
+
         public List<GetLoginModel> GetLogin()
         {
             ConexionDataAccess dac = new ConexionDataAccess(connection);
