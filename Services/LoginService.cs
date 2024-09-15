@@ -70,7 +70,6 @@ namespace reportesApi.Services
                     .Select(dataRow => new GetLoginModel {
                         Id = int.Parse(dataRow["Id"].ToString()),
                         Nombres = dataRow["Nombres"].ToString(),
-                        ApellidoPaterno = dataRow["ApellidoPaterno"].ToString(),
                         Correo = dataRow["Correo"].ToString(),
                         Contraseña = dataRow["Contraseña"].ToString(),
                         NumeroTelefono= dataRow["NumeroTelefono"].ToString(),
