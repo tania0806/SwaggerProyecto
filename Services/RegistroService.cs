@@ -1,39 +1,47 @@
+using System;
+using System.Collections;
 using System.Data;
 using System.Data.SqlClient;
-using System.Threading.Tasks;
-using Microsoft.Extensions.Configuration;
-
-public class RegistroService
+using reportesApi.DataContext;
+using reportesApi.Models;
+namespace reportesApi.Services
 {
-    private readonly string _connectionString;
-
-    public RegistroService(IConfiguration configuration)
+    public class RegistroService
     {
-        // Obtener la cadena de conexión desde el archivo de configuración
-        _connectionString = configuration.GetConnectionString("DefaultConnection");
-    }
-
-    public async Task<bool> ValidarLoginAsync(RegistroModel registro)
-    {
-        using (SqlConnection conn = new SqlConnection(_connectionString))
+        private  string connection;
+        
+        
+        public RegistroService(IMarcatelDatabaseSetting settings)
         {
-            using (SqlCommand cmd = new SqlCommand("ValidarLogin", conn))
+             connection = settings.ConnectionString;
+        }
+        public RegistroModel registro(string Correo, string Contraseña)
+        {
+            
+            RegistroModel registro = new RegistroModel();
+            ConexionDataAccess dac = new ConexionDataAccess(connection);
+            try
             {
-                cmd.CommandType = CommandType.StoredProcedure;
-
-                // Agregar parámetros al stored procedure
-                cmd.Parameters.AddWithValue("@Correo", registro.Correo);
-                cmd.Parameters.AddWithValue("@Contraseña", registro.Contraseña);
-
-                // Abrir la conexión
-                await conn.OpenAsync();
-
-                // Ejecutar el stored procedure y obtener el resultado
-                var resultado = (int)await cmd.ExecuteScalarAsync();
-
-                // Si el resultado es 1, el login es válido
-                return resultado == 1;
+                ArrayList parametros = new ArrayList();
+                parametros.Add(new SqlParameter { ParameterName = "@Correo", SqlDbType = SqlDbType.VarChar, Value = Correo });
+                parametros.Add(new SqlParameter { ParameterName = "@Contraseña", SqlDbType = SqlDbType.VarChar, Value = Contraseña });
+                DataSet ds = dac.Fill("ValidarLogin", parametros);
+                if (ds.Tables[0].Rows.Count > 0)
+                {
+                    foreach (DataRow row in ds.Tables[0].Rows)
+                    {
+                        registro.Correo = row["Correo"].ToString();
+                        registro.Contraseña = row["Contraseña"].ToString();
+                    
+                    }
+                }
+                return registro;
             }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+           
         }
     }
 }
