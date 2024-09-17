@@ -1,44 +1,49 @@
-using System;
 using Microsoft.AspNetCore.Mvc;
-using reportesApi.Services;
-using reportesApi.Utilities;
-using Microsoft.AspNetCore.Authorization;
-using reportesApi.Models;
-using Microsoft.Extensions.Logging;
-using System.Net;
-using reportesApi.Helpers;
-using Newtonsoft.Json;
-using System.IO;
-using OfficeOpenXml;
-using OfficeOpenXml.Style;
-using Microsoft.AspNetCore.Hosting;
-using reportesApi.Models.Compras;
 
-namespace reportesApi.Controllers
+namespace SwaggerProyecto.Controllers
 {
-   
-    [Route("api")]
-    public class RegistroController: ControllerBase
+    [ApiController]
+    [Route("api/[controller]")]
+    public class RegistroController : ControllerBase
     {
-   
-        private readonly RegistroService _RegistroService;
-        private readonly ILogger<RegistroController> _logger;
-  
-        private readonly IJwtAuthenticationService _authService;
-        private readonly IWebHostEnvironment _hostingEnvironment;
-        
+        // Acción para el registro
+        [HttpPost("Registro")]
+        public IActionResult Registro([FromBody] RegistroRequest registroRequest)
+        {
+            // Validación de que los campos no sean nulos o vacíos
+            if (string.IsNullOrEmpty(registroRequest.Correo) || string.IsNullOrEmpty(registroRequest.Contrasena))
+            {
+                return BadRequest(new { success = false, message = "Correo y contraseña no pueden estar vacíos." });
+            }
 
-        Encrypt enc = new Encrypt();
+            // Autenticación del usuario
+            bool isAuthenticated = AuthenticateUser(registroRequest.Correo, registroRequest.Contrasena);
 
-        public RegistroController(RegistroService RegistroService, ILogger<RegistroController> logger, IJwtAuthenticationService authService) {
-            _RegistroService = RegistroService;
-            _logger = logger;
-       
-            _authService = authService;
-            // Configura la ruta base donde se almacenan los archivos.
-            // Asegúrate de ajustar la ruta según tu estructura de directorios.
+            if (isAuthenticated)
+            {
+                // Si está autenticado, redirige al home
+                return Ok(new { success = true, message = "Inicio de sesión exitoso", redirectTo = "/home" });
+            }
+            else
+            {
+                // Si no está autenticado, devuelve un mensaje de error
+                return Unauthorized(new { success = false, message = "Correo o contraseña incorrectos." });
+            }
         }
 
-       
+        // Método de ejemplo para autenticar usuario
+        private bool AuthenticateUser(string Correo, string Contraseña)
+        {
+            // Aquí iría la lógica para autenticar al usuario, como consultar la base de datos
+            // Por ahora, usaremos un ejemplo estático
+            return Correo == "admin@admin.com" && Contraseña == "admin123";
+        }
+    }
+
+    // Clase para manejar el request
+    public class RegistroRequest
+    {
+        public string Correo { get; set; }
+        public string Contrasena { get; set; }
     }
 }
