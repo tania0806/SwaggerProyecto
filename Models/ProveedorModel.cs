@@ -23,7 +23,7 @@ namespace reportesApi.Models
         public string Direccion { get; set; }
         public string Email { get; set; }
         public string RFC { get; set; }
-        public string PlazoPago { get; set; }
+        public int PlazoPago { get; set; }
         public decimal PorcentajeRetencion { get; set;}
     
     }
