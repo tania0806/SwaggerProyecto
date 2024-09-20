@@ -122,11 +122,11 @@ namespace reportesApi.Services
             return mensaje;
         }
 
-        public void DeleteProveedor(int IdProveedor)
+        public void DeleteProveedor(int id)
         {
             ConexionDataAccess dac = new ConexionDataAccess(connection);
             parametros = new ArrayList();
-            parametros.Add(new SqlParameter { ParameterName = "@IdProveedor", SqlDbType = SqlDbType.Int, Value = IdProveedor });
+            parametros.Add(new SqlParameter { ParameterName = "@IdProveedor", SqlDbType = SqlDbType.Int, Value = id });
 
 
             try

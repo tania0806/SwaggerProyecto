@@ -117,11 +117,11 @@ namespace reportesApi.Services
             return mensaje;
         }
 
-        public void DeleteInsumo(int IdInsumo)
+        public void DeleteInsumo(int id)
         {
             ConexionDataAccess dac = new ConexionDataAccess(connection);
             parametros = new ArrayList();
-            parametros.Add(new SqlParameter { ParameterName = "@IdInsumo", SqlDbType = SqlDbType.Int, Value = IdInsumo });
+            parametros.Add(new SqlParameter { ParameterName = "@IdInsumo", SqlDbType = SqlDbType.Int, Value = id });
 
 
             try

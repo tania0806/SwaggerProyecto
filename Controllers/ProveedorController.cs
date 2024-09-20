@@ -112,7 +112,7 @@ namespace reportesApi.Controllers
         }
 
         [HttpDelete("DeleteProveedor/{id}")]
-        public IActionResult DeleteProveedor([FromRoute] int IdProveedor)
+        public IActionResult DeleteProveedor([FromRoute] int id)
         {
             var objectResponse = Helper.GetStructResponse();
             try
@@ -121,7 +121,7 @@ namespace reportesApi.Controllers
                 objectResponse.success = true;
                 objectResponse.message = "data cargado con exito";
 
-                _ProveedorService.DeleteProveedor(IdProveedor);
+                _ProveedorService.DeleteProveedor(id);
 
             }
 

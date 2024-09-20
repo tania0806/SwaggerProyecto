@@ -111,8 +111,8 @@ namespace reportesApi.Controllers
             return new JsonResult(objectResponse);
         }
 
-        [HttpDelete("DeleteInsumo/{IdInsumo}")]
-        public IActionResult DeleteInsumo([FromRoute] int IdInsumo )
+        [HttpDelete("DeleteInsumo/{id}")]
+        public IActionResult DeleteInsumo([FromRoute] int id )
         {
             var objectResponse = Helper.GetStructResponse();
             try
@@ -121,7 +121,7 @@ namespace reportesApi.Controllers
                 objectResponse.success = true;
                 objectResponse.message = "data cargado con exito";
 
-                _InsumoService.DeleteInsumo(IdInsumo);
+                _InsumoService.DeleteInsumo(id);
 
             }
 
