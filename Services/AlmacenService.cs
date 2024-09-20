@@ -97,7 +97,7 @@ namespace reportesApi.Services
 
             try
             {
-                DataSet ds = dac.Fill("sp_update_almacen", parametros);
+                DataSet ds = dac.Fill("sp_update_almacenes", parametros);
                 mensaje = ds.Tables[0].AsEnumerable().Select(dataRow => dataRow["mensaje"].ToString()).ToList()[0];
             }
             catch (Exception ex)
@@ -117,7 +117,7 @@ namespace reportesApi.Services
 
             try
             {
-                dac.ExecuteNonQuery("sp_delete_almacen", parametros);
+                dac.ExecuteNonQuery("sp_delete_almacenes", parametros);
             }
             catch (Exception ex)
             {
