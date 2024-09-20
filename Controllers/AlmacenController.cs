@@ -112,7 +112,7 @@ namespace reportesApi.Controllers
         }
 
         [HttpDelete("DeleteAlmacen/{id}")]
-        public IActionResult DeleteAlmacen([FromRoute] int IdAlmacen )
+        public IActionResult DeleteAlmacen([FromRoute] int id )
         {
             var objectResponse = Helper.GetStructResponse();
             try
@@ -121,7 +121,7 @@ namespace reportesApi.Controllers
                 objectResponse.success = true;
                 objectResponse.message = "data cargado con exito";
 
-                _AlmacenService.DeleteAlmacen(IdAlmacen);
+                _AlmacenService.DeleteAlmacen(id);
 
             }
 
