@@ -25,7 +25,7 @@ namespace reportesApi.Services
                 ArrayList parametros = new ArrayList();
                 parametros.Add(new SqlParameter { ParameterName = "@Correo", SqlDbType = SqlDbType.VarChar, Value = Correo });
                 parametros.Add(new SqlParameter { ParameterName = "@Contraseña", SqlDbType = SqlDbType.VarChar, Value = Contraseña });
-                DataSet ds = dac.Fill("Validar_Login", parametros);
+                DataSet ds = dac.Fill("ValidarLogin", parametros);
                 if (ds.Tables[0].Rows.Count > 0)
                 {
                     foreach (DataRow row in ds.Tables[0].Rows)

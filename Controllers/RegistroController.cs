@@ -28,7 +28,7 @@ namespace reportesApi.Controllers
         // Ruta para el inicio de sesión
         [AllowAnonymous]
         [HttpPost("SignIn")]
-        public JsonResult SignIn([FromBody] InsertRegistro registro) // InsertRegistro es un modelo que ya debes tener en tu proyecto
+        public JsonResult registro([FromBody] InsertRegistro registro) // InsertRegistro es un modelo que ya debes tener en tu proyecto
         {
             ResponseLogin result = new ResponseLogin(); // Clase para el formato de respuesta
             result.response = new ResponseBody(); // Cuerpo de la respuesta
