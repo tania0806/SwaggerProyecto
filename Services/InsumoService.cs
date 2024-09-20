@@ -74,7 +74,7 @@ namespace reportesApi.Services
             parametros.Add(new SqlParameter { ParameterName = "@Insumo", SqlDbType = System.Data.SqlDbType.VarChar, Value = Insumo.Insumo});
             parametros.Add(new SqlParameter { ParameterName = "@DescripcionInsumo", SqlDbType = System.Data.SqlDbType.VarChar, Value = Insumo.DescripcionInsumo});
             parametros.Add(new SqlParameter { ParameterName = "@Costo", SqlDbType = System.Data.SqlDbType.Decimal, Value = Insumo.Costo});
-            parametros.Add(new SqlParameter { ParameterName = "@UnidadMedida", SqlDbType = System.Data.SqlDbType.VarChar, Value = Insumo.UnidadMedida});
+            parametros.Add(new SqlParameter { ParameterName = "@UnidadMedida", SqlDbType = System.Data.SqlDbType.Int, Value = Insumo.UnidadMedida});
             parametros.Add(new SqlParameter { ParameterName = "@InsumoUp", SqlDbType = System.Data.SqlDbType.VarChar, Value = Insumo.InsumoUp});
 
             try
